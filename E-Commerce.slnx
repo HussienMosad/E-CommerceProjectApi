@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Core/">
+    <Project Path="Core/Domain/Domain.csproj" />
+    <Project Path="Core/Services/Services.csproj" />
+  </Folder>
+  <Project Path="E-Commerce.Api/E-Commerce.Api.csproj" />
+</Solution>
