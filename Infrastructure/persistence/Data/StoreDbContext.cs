@@ -10,11 +10,11 @@
         }
 
         #region DbSets
-        DbSet<Product> Products { get; set; }
+        public DbSet<Product> Products { get; set; }
 
-        DbSet<ProductBrand> ProductBrands { get; set; }
+        public DbSet<ProductBrand> ProductBrands { get; set; }
 
-        DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<ProductType> ProductTypes { get; set; }
 
         #endregion
     }

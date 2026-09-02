@@ -1,12 +1,14 @@
 
+using Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 using persistence.Data;
 
 namespace E_Commerce.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -22,9 +24,13 @@ namespace E_Commerce.Api
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddSwaggerGen();
-
-
+            builder.Services.AddScoped<IDataSeeding , DataSeeding>();
+            builder.Services.AddScoped<IUnitOfWork , IUnitOfWork>();
             var app = builder.Build();
+
+            using var Scope = app.Services.CreateScope();
+            var ObjectOfDataSeeding = Scope.ServiceProvider.GetRequiredService<IDataSeeding>();
+           await  ObjectOfDataSeeding.SeedDataAsync();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
