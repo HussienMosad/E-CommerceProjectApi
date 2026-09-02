@@ -3,6 +3,10 @@ using Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using persistence.Data;
+using Services;
+using Services.Abstraction.Contracts;
+using Services.Immplemntations;
+using System.Reflection.Metadata;
 
 namespace E_Commerce.Api
 {
@@ -26,6 +30,8 @@ namespace E_Commerce.Api
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<IDataSeeding , DataSeeding>();
             builder.Services.AddScoped<IUnitOfWork , IUnitOfWork>();
+            builder.Services.AddAutoMapper(cfg => { }, typeof(AssemblyRefrence).Assembly);
+            builder.Services.AddScoped<IServiceManager, ServiceManager>();
             var app = builder.Build();
 
             using var Scope = app.Services.CreateScope();
