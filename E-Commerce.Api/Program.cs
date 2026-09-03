@@ -3,6 +3,7 @@ using Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using persistence.Data;
+using persistence.Repositories;
 using Services;
 using Services.Abstraction.Contracts;
 using Services.Immplemntations;
@@ -29,7 +30,7 @@ namespace E_Commerce.Api
             builder.Services.AddOpenApi();
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<IDataSeeding , DataSeeding>();
-            builder.Services.AddScoped<IUnitOfWork , IUnitOfWork>();
+            builder.Services.AddScoped<IUnitOfWork , UnitOfWork>();
             builder.Services.AddAutoMapper(cfg => { }, typeof(AssemblyRefrence).Assembly);
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
             var app = builder.Build();
@@ -48,6 +49,7 @@ namespace E_Commerce.Api
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 
