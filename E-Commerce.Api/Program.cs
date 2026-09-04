@@ -1,4 +1,4 @@
-
+using System.Text.Json.Serialization;
 using Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
@@ -19,7 +19,13 @@ namespace E_Commerce.Api
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services
+                .AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(
+                        new JsonStringEnumConverter());
+                });
 
             // Access DbContext
             builder.Services.AddDbContext<StoreDbContext>(options =>

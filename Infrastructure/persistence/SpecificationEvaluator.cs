@@ -15,9 +15,25 @@ namespace persistence
             var Query = inputQuery;
             if(specifications.Criteria is not null)
                 Query = Query.Where(specifications.Criteria);
+
+
+            if (specifications.OrderBy is not null)
+                Query = Query.OrderBy(specifications.OrderBy);
+
+
+            if(specifications.OrderByDescending is not null)
+                Query = Query.OrderByDescending(specifications.OrderByDescending);
+
+
+
             if (specifications.IncludeExpressions is not null && specifications.IncludeExpressions.Count() > 0)
             {
                 Query = specifications.IncludeExpressions.Aggregate(Query, (currentquery, expression) => currentquery.Include(expression));
+            }
+
+            if (specifications.IsPaginted)
+            {
+                Query = Query.Skip(specifications.Skip).Take(specifications.Take);
             }
             return Query;
         }
