@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Domain.Exceptions
+{
+    public class ProductNotFoundException : NotFoundException
+    {
+        public ProductNotFoundException(int id)
+            :base($"Product With Id {id} Not Found")
+        {
+            
+        }
+    }
+}

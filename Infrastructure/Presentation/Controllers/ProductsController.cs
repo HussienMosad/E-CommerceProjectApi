@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstraction.Contracts;
 using Shared;
 using Shared.Dtos;
 using Shared.Enums;
+using Shared.ErrorDtos;
 using System.Net;
 
 
@@ -40,7 +42,10 @@ namespace Presentation.Controllers
 
         //End Point ==>  Get Product By ID 
         // BaseUrl / Products / 10
-
+        [ProducesResponseType(typeof(ProductResultDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ProductResultDto>> GetProductById(int id)
         => Ok(await _serviceManager.ProductService.GetProductByIdAsync(id));

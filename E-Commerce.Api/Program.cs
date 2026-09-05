@@ -8,6 +8,10 @@ using Services;
 using Services.Abstraction.Contracts;
 using Services.Immplemntations;
 using System.Reflection.Metadata;
+using E_Commerce.Api.Middleware;
+using Microsoft.AspNetCore.Mvc;
+using E_Commerce.Api.Factories;
+using E_Commerce.Api.Extensions;
 
 namespace E_Commerce.Api
 {
@@ -15,43 +19,34 @@ namespace E_Commerce.Api
     {
         public static async Task Main(string[] args)
         {
+
+            #region DI Container
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Add Web Api services
 
-            builder.Services
-                .AddControllers()
-                .AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.Converters.Add(
-                        new JsonStringEnumConverter());
-                });
+            builder.Services.AddWebApiServices();
 
-            // Access DbContext
-            builder.Services.AddDbContext<StoreDbContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            });
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
-            builder.Services.AddSwaggerGen();
-            builder.Services.AddScoped<IDataSeeding , DataSeeding>();
-            builder.Services.AddScoped<IUnitOfWork , UnitOfWork>();
-            builder.Services.AddAutoMapper(cfg => { }, typeof(AssemblyRefrence).Assembly);
-            builder.Services.AddScoped<IServiceManager, ServiceManager>();
+            // Add Infrastruce Services
+            builder.Services.AddInfrastruceServices(builder.Configuration);
+
+            // Add Core Services
+            builder.Services.AddCoreServices();
+            #endregion
+
+            #region Middle Wares
             var app = builder.Build();
+            await app.SeedDataAsync();
 
-            using var Scope = app.Services.CreateScope();
-            var ObjectOfDataSeeding = Scope.ServiceProvider.GetRequiredService<IDataSeeding>();
-           await  ObjectOfDataSeeding.SeedDataAsync();
+
+
+            await app.UseExceptionHandlingMiddleWares();
+            
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
-
-                app.UseSwagger();
-                app.UseSwaggerUI();
+               await app.UseSwaggerMiddleWares();
             }
 
             app.UseHttpsRedirection();
@@ -63,6 +58,7 @@ namespace E_Commerce.Api
             app.MapControllers();
 
             app.Run();
+            #endregion
         }
     }
 }
