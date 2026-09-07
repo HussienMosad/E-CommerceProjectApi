@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Shared.Dtos
+namespace Shared.Dtos.ProductDtos
 {
     public record ProductResultDto
     {
