@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Services.Abstraction.Contracts;
 using Shared.Dtos.BasketDtos;
 using System;
@@ -7,6 +8,7 @@ using System.Text;
 
 namespace Presentation.Controllers
 {
+    [Authorize]
     public class BasketController(IServiceManager _serviceManager) : ApiController
     {
 

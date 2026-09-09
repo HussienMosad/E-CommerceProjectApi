@@ -31,7 +31,7 @@ namespace E_Commerce.Api
             builder.Services.AddInfrastruceServices(builder.Configuration);
 
             // Add Core Services
-            builder.Services.AddCoreServices();
+            builder.Services.AddCoreServices(builder.Configuration);
             #endregion
 
             #region Middle Wares
@@ -52,6 +52,8 @@ namespace E_Commerce.Api
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
