@@ -1,4 +1,6 @@
-﻿namespace persistence.Data
+﻿using Domain.Entities.OrderModule;
+
+namespace persistence.Data
 {
     public class StoreDbContext : DbContext
     {
@@ -16,6 +18,11 @@
 
         public DbSet<ProductType> ProductTypes { get; set; }
 
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
+
+        public DbSet<OrderItem> OrderItems { get; set; }
         #endregion
     }
 }

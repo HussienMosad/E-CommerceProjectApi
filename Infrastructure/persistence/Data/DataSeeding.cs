@@ -1,5 +1,6 @@
 ﻿using Domain.Contracts;
 using Domain.Entities.IdentityModule;
+using Domain.Entities.OrderModule;
 using Microsoft.AspNetCore.Identity;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -49,13 +50,31 @@ namespace persistence.Data
                        await _dbContext.AddRangeAsync(Products);
                 }
 
-               await  _dbContext.SaveChangesAsync();
+                if (!_dbContext.DeliveryMethods.Any())
+                {
+                   using var deliveryData = File.OpenRead(
+                        "..\\Infrastructure\\persistence\\Data\\DataSeed\\delivery.json");
+
+                    var deliveries =
+                        await JsonSerializer.DeserializeAsync<List<DeliveryMethod>>(
+                            deliveryData);
+
+                    if (deliveries is not null && deliveries.Any())
+                    {
+                        await _dbContext.DeliveryMethods.AddRangeAsync(deliveries);
+                    }
+                }
+
+                await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"The Error IS : {ex}");
+                Console.WriteLine($"Data Seeding Error: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+
+                throw;
             }
-            
+
         }
 
         public async Task SeedIdentityDataAsync()
