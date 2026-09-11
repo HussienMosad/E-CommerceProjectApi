@@ -4,7 +4,8 @@ using Shared.Dtos.OrderDtos;
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using ShippingAddress = Domain.Entities.OrderModule.Address;
+using IdentityAddress = Domain.Entities.IdentityModule.Address;
 namespace Services.MappingProfiles
 {
     public class OrderProfile : Profile
@@ -12,8 +13,8 @@ namespace Services.MappingProfiles
 
         public OrderProfile()
         {
-            CreateMap<Address, AddressDto>().ReverseMap();
-
+            CreateMap<ShippingAddress, AddressDto>().ReverseMap();
+            CreateMap<IdentityAddress, AddressDto>().ReverseMap();
             CreateMap<DeliveryMethod, DeliveryMethodResult>();
 
             CreateMap<OrderItem, OrderItemDto>()
