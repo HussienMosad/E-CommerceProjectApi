@@ -137,13 +137,13 @@ namespace Services.Immplemntations
 
         private long CalculateTotalAsync(CustomerBasket Basket)
         {
-            var amount = (long)(Basket.BasketItems.Sum(i => i.Quantity * i.Price) + Basket.ShippingPrice) * 100;
+            var amount = (long)(Basket.Items.Sum(i => i.Quantity * i.Price) + Basket.ShippingPrice) * 100;
             return amount;
         }
 
         private async Task ValidateBasketAsync(CustomerBasket Basket)
         {
-            foreach (var item in Basket.BasketItems)
+            foreach (var item in Basket.Items)
             {
                 var Product = await _unitOfWork.GetRepository<Product, int>().GetByIdAsync(item.Id)
                     ?? throw new ProductNotFoundException(item.Id);

@@ -94,10 +94,13 @@ namespace Services.Immplemntations
 
         public async Task<AddressDto> GetAddressAsync(string UserEmail)
         {
-            var User = await _userManager.Users.Include(u => u.Email == UserEmail).FirstOrDefaultAsync()
+            var User = await _userManager.Users
+                .Where(u => u.Email == UserEmail)           // Filter by email
+                .Include(u => u.Address)                    // Load the Address navigation property
+                .FirstOrDefaultAsync()
                 ?? throw new UserNotFoundException(UserEmail);
 
-           return  _mapper.Map<AddressDto>(User.Address);
+            return _mapper.Map<AddressDto>(User.Address);
         }
 
         public async Task<UserResultDto> GetCurrentUserAsync(string UserEmail)

@@ -25,7 +25,7 @@ namespace E_Commerce.Api
 
             // Add Web Api services
 
-            builder.Services.AddWebApiServices();
+            builder.Services.AddWebApiServices(builder.Configuration);
 
             // Add Infrastruce Services
             builder.Services.AddInfrastruceServices(builder.Configuration);
@@ -51,7 +51,7 @@ namespace E_Commerce.Api
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();

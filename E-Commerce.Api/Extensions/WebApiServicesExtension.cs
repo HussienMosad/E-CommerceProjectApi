@@ -8,7 +8,7 @@ namespace E_Commerce.Api.Extensions
 {
     public static class WebApiServicesExtension
     {
-        public static IServiceCollection AddWebApiServices(this IServiceCollection Services)
+        public static IServiceCollection AddWebApiServices(this IServiceCollection Services , IConfiguration configuration)
         {
            Services
                .AddControllers()
@@ -17,6 +17,19 @@ namespace E_Commerce.Api.Extensions
                    options.JsonSerializerOptions.Converters.Add(
                        new JsonStringEnumConverter());
                });
+            var frontUrl = configuration.GetSection("URLs")["FrontUrl"];
+
+            Services.AddCors(options =>
+            {
+                // URL => URL PROJECT ANGULAR [CLIENT]
+                // HEADER, METHODS [GET, POST]
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .WithOrigins(frontUrl);
+                });
+            });
 
             Services.AddOpenApi();
             Services.AddSwaggerGen(option =>

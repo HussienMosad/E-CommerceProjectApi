@@ -31,13 +31,13 @@ namespace Services.Immplemntations
         public async Task<OrderResult> CreateOrderAsync(OrderRequest orderRequest, string UserEmail)
         {
             // [1] Map addressDto to address
-            var Address = _mapper.Map<Address>(orderRequest.ShippingAddress);
+            var Address = _mapper.Map<Address>(orderRequest.ShipToAddress);
             // [2] GetOrderItems ==> BasketId ==> Basket ==> BasketItems [Id]
             var Basket = await _basketRepository.GetBasketByIdAsync(orderRequest.BasketId)
                 ?? throw new BasketNotFoundException(orderRequest.BasketId);
 
             var OrderItems = new List<OrderItem>();
-            foreach (var item in Basket.BasketItems)
+            foreach (var item in Basket.Items)
             {
                 var Product =await _unitOfWork.GetRepository<Product, int>().GetByIdAsync(item.Id)
                     ?? throw new ProductNotFoundException(item.Id);
