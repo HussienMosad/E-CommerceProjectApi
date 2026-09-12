@@ -45,12 +45,16 @@ namespace Services.Immplemntations
                 OrderItems.Add(CreateOrderItem(Product , item));
                 
             }
+            var OrderRepo = _unitOfWork.GetRepository<Order, Guid>();
             // [3] GetDeliveryMethod ==> DeliveryMethodId ==> DB
             var deliveryMethod = await _unitOfWork
                 .GetRepository<DeliveryMethod, int>()
                 .GetByIdAsync(orderRequest.DeliveryMethodId)
                 ?? throw new DeliveryMethodNotFoundException(
                     orderRequest.DeliveryMethodId);
+
+            var OrderExcist = await OrderRepo.GetByIdAsync(new OrderWithPaymentIntentIdSpecfications(Basket.PaymentIntentId));
+            if (OrderExcist is not null) OrderRepo.Delete(OrderExcist);
 
             // [4] Calculate SubTotal ==> OrderItem.Q * OrderItem.Price
             var subTotal = OrderItems.Sum(
@@ -62,11 +66,9 @@ namespace Services.Immplemntations
                 Address,
                 OrderItems,
                 deliveryMethod,
-                subTotal);
+                subTotal,Basket.PaymentIntentId);
 
-            await _unitOfWork
-                .GetRepository<Order, Guid>()
-                .AddAsync(order);
+            await OrderRepo.AddAsync(order);
 
             await _unitOfWork.SaveChangesAsync();
 

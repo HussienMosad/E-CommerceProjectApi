@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Shared.Dtos.BasketDtos
+﻿namespace Shared.Dtos.BasketDtos
 {
     public record BasketDto
     {
         public string Id { get; init; }
 
         public ICollection<BasketItemDto> BasketItems { get; init; } = [];
+        public string? PaymentIntentId { get; init; }
+
+        public string? ClientSecret { get; init; }
+        public decimal? ShippingPrice { get; init; }
+        public int? DeliveryMethodId { get; init; }
     }
 }
