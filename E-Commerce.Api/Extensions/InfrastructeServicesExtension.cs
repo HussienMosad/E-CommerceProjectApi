@@ -38,6 +38,7 @@ namespace E_Commerce.Api.Extensions
 
             Services.AddScoped<IDataSeeding, DataSeeding>();
             Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            Services.AddScoped<ICacheRepository , CacheRepository>();
             Services.AddScoped<IBasketRepository , BasketRepository>();
 
             Services.Validatejwt(Configuration);

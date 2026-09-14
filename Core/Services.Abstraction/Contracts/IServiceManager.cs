@@ -11,5 +11,6 @@ namespace Services.Abstraction.Contracts
         public IAuthenticationServices AuthenticationService { get;  }
         public IOrderServices OrderServices { get; }
         public IPaymentServices PaymentsServices { get; }
+        public ICacheService CacheService { get;}
     }
 }
